@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI EDGE - 生成AIで業務を革新する</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background-color: #0A1128;
+      color: #F0F2F5;
+    }
+
+    .scroll-container {
+      scroll-snap-type: y mandatory;
+      overflow-y: scroll;
+      height: 100vh;
+      scroll-behavior: smooth;
+    }
+
+    section {
+      height: 100vh;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      scroll-snap-align: start;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .content {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+    }
+
+    h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      color: #00FFC5;
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .btn {
+      display: inline-block;
+      background-color: #00FFC5;
+      color: #0A1128;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 255, 197, 0.3);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 2rem;
+      transition: all 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    form {
+      max-width: 500px;
+      margin: 0 auto;
+      text-align: left;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 0.8rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
+      color: #F0F2F5;
+    }
+
+    .page-nav {
+      position: fixed;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 100;
+    }
+
+    .nav-dot {
+      width: 12px;
+      height: 12px;
+      background-color: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      margin: 10px 0;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .nav-dot.active {
+      background-color: #00FFC5;
+      transform: scale(1.5);
+    }
+
+    /* 背景アニメーション */
+    .bg-animation {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      background-color: rgba(0, 255, 197, 0.1);
+      border-radius: 50%;
+      animation: float 15s infinite linear;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) translateX(-10vw);
+      }
+      100% {
+        transform: translateY(-20vh) translateX(10vw);
+      }
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.2rem;
+      }
+      h2 {
+        font-size: 1.8rem;
+      }
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .success-message {
+      background-color: rgba(0, 255, 197, 0.1);
+      border: 1px solid #00FFC5;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 2rem;
+      display: none;
+    }
+
+    .success-message.show {
+      display: block;
+    }
+
+    .highlight {
+      color: #00FFC5;
+    }
+  </style>
+</head>
+<body>
+  <!-- Page Navigation -->
+  <div class="page-nav">
+    <div class="nav-dot active" data-section="hero"></div>
+    <div class="nav-dot" data-section="services"></div>
+    <div class="nav-dot" data-section="cases"></div>
+    <div class="nav-dot" data-section="about"></div>
+    <div class="nav-dot" data-section="form"></div>
+  </div>
+
+  <div class="scroll-container">
+    <!-- Hero Section -->
+    <section id="hero">
+      <div class="bg-animation" id="hero-bg"></div>
+      <div class="content">
+        <h1>生成AIの力で<br><span class="highlight">業務を革新する</span></h1>
+        <p>最先端のAI技術を活用したソリューションで、ビジネスの効率化と創造性を高めます。</p>
+        <a href="#form" class="btn">今すぐ事前登録</a>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services">
+      <div class="bg-animation" id="services-bg"></div>
+      <div class="content">
+        <h2>サービス</h2>
+        <p>私たちの生成AIソリューションは、あらゆるビジネスニーズに対応します。</p>
+        
+        <div class="grid">
+          <div class="card">
+            <div class="icon">🤖</div>
+            <h3>業務自動化</h3>
+            <p>反復的なタスクをAIで自動化し、創造的な仕事に集中できます。</p>
+          </div>
+          
+          <div class="card">
+            <div class="icon">📊</div>
+            <h3>データ分析</h3>
+            <p>大量のデータから価値ある洞察を引き出し、意思決定をサポートします。</p>
+          </div>
+          
+          <div class="card">
+            <div class="icon">💬</div>
+            <h3>対話型AI</h3>
+            <p>カスタマイズされたチャットボットでカスタマーサポートを強化します。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Use Cases Section -->
+    <section id="cases">
+      <div class="bg-animation" id="cases-bg"></div>
+      <div class="content">
+        <h2>導入事例</h2>
+        <p>様々な業界で実績のある導入事例をご紹介します。</p>
+        
+        <div class="grid">
+          <div class="card">
+            <h3>製造業</h3>
+            <p class="highlight" style="font-size: 2.5rem; font-weight: bold;">40%</p>
+            <p>品質検査にかかる時間の削減に成功</p>
+          </div>
+          
+          <div class="card">
+            <h3>金融業</h3>
+            <p class="highlight" style="font-size: 2.5rem; font-weight: bold;">65%</p>
+            <p>問い合わせ対応時間の短縮を実現</p>
+          </div>
+          
+          <div class="card">
+            <h3>医療業界</h3>
+            <p class="highlight" style="font-size: 2.5rem; font-weight: bold;">78%</p>
+            <p>診断支援システムの精度向上</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+      <div class="bg-animation" id="about-bg"></div>
+      <div class="content">
+        <h2>私たちについて</h2>
+        <p>AI EDGEは、最先端の人工知能技術を駆使して、企業の業務効率化を支援するテクノロジーカンパニーです。</p>
+        <p>AI研究者、ソフトウェアエンジニア、ビジネスコンサルタントなど、多様な専門家が協力し、お客様のビジネス課題を解決します。</p>
+        
+        <div class="card" style="margin-top: 2rem;">
+          <h3>ビジョン</h3>
+          <p>誰もが最先端のAI技術の恩恵を受けられる世界を創造する</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Form Section -->
+    <section id="form">
+      <div class="bg-animation" id="form-bg"></div>
+      <div class="content">
+        <h2>事前登録</h2>
+        <p>サービス開始時に優先的にご案内いたします。</p>
+        
+        <form id="registration-form">
+          <div class="form-group">
+            <label for="name">お名前 *</label>
+            <input type="text" id="name" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="email">メールアドレス *</label>
+            <input type="email" id="email" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="company">会社名</label>
+            <input type="text" id="company">
+          </div>
+          
+          <div class="form-group">
+            <label for="industry">業種</label>
+            <select id="industry">
+              <option value="">選択してください</option>
+              <option value="manufacturing">製造業</option>
+              <option value="finance">金融業</option>
+              <option value="healthcare">医療</option>
+              <option value="retail">小売</option>
+              <option value="technology">IT/テクノロジー</option>
+              <option value="other">その他</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="message">お問い合わせ内容</label>
+            <textarea id="message" rows="4"></textarea>
+          </div>
+          
+          <div class="form-group" style="display: flex; align-items: center;">
+            <input type="checkbox" id="privacy" required style="width: auto; margin-right: 10px;">
+            <label for="privacy">プライバシーポリシーに同意します</label>
+          </div>
+          
+          <button type="submit" class="btn" style="width: 100%;">登録する</button>
+        </form>
+        
+        <div class="success-message" id="success-message">
+          <h3>登録ありがとうございます!</h3>
+          <p>ご入力いただいたメールアドレスに確認メールをお送りしました。</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // 背景アニメーション用のパーティクル生成
+    document.querySelectorAll('.bg-animation').forEach(bg => {
+      const particlesCount = 15;
+      
+      for (let i = 0; i < particlesCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        // ランダムなサイズ、位置、透明度、遅延
+        const size = Math.random() * 150 + 50;
+        const posX = Math.random() * 100;
+        const delay = Math.random() * 10;
+        const duration = Math.random() * 10 + 10;
+        const opacity = Math.random() * 0.15 + 0.05;
+        
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${posX}%`;
+        particle.style.animationDelay = `${delay}s`;
+        particle.style.animationDuration = `${duration}s`;
+        particle.style.opacity = opacity;
+        
+        bg.appendChild(particle);
+      }
+    });
+    
+    // ナビゲーションドット
+    const sections = document.querySelectorAll('section');
+    const navDots = document.querySelectorAll('.nav-dot');
+    
+    // スクロール検出とドットの活性化
+    const scrollContainer = document.querySelector('.scroll-container');
+    
+    scrollContainer.addEventListener('scroll', () => {
+      let current = '';
+      const scrollPos = scrollContainer.scrollTop;
+      
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        
+        if (scrollPos >= sectionTop - sectionHeight / 3) {
+          current = section.getAttribute('id');
+        }
+      });
+      
+      navDots.forEach(dot => {
+        dot.classList.remove('active');
+        if (dot.dataset.section === current) {
+          dot.classList.add('active');
+        }
+      });
+    });
+    
+    // ドットクリックでスクロール
+    navDots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        const sectionId = dot.dataset.section;
+        const section = document.getElementById(sectionId);
+        const scrollContainer = document.querySelector('.scroll-container');
+        
+        scrollContainer.scrollTo({
+          top: section.offsetTop,
+          behavior: 'smooth'
+        });
+      });
+    });
+    
+    // フォーム送信処理
+    document.getElementById('registration-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // ここに実際のフォーム送信処理を追加
+      
+      // 成功メッセージ表示
+      document.getElementById('success-message').classList.add('show');
+      this.reset();
+      
+      // 5秒後にメッセージを非表示
+      setTimeout(() => {
+        document.getElementById('success-message').classList.remove('show');
+      }, 5000);
+    });
+  </script>
+</body>
+</html>
